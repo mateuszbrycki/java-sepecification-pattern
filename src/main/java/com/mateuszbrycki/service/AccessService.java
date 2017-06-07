@@ -1,16 +1,21 @@
 package com.mateuszbrycki.service;
 
-import com.mateuszbrycki.model.Role;
 import com.mateuszbrycki.model.User;
+import com.mateuszbrycki.service.specification.IsAllowed;
+import com.mateuszbrycki.specification.Specification;
 
 /**
  * Created by Mateusz Brycki on 07/06/2017.
  */
 public class AccessService {
 
-    public Boolean isAllowed(User user) {
-        Role role = user.getRole();
+    private Specification<User> specification;
 
-        return role.equals(Role.ADMINISTRATOR) || (role.equals(Role.REGULAR) && user.getAge() > 18);
+    public AccessService() {
+        this.specification = new IsAllowed();
+    }
+
+    public Boolean isAllowed(User user) {
+        return specification.isSatisfiedBy(user);
     }
 }
